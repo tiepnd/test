@@ -35,6 +35,6 @@ public class Order {
 
     @Override
     public String toString() {
-        return number + "-" + new SimpleDateFormat(Constants.DATE_FORMAT).format(date);
+        return number + "|" + new SimpleDateFormat(Constants.DATE_FORMAT).format(date);
     }
 }

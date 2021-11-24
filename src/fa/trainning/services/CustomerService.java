@@ -5,10 +5,13 @@ import fa.trainning.entities.Order;
 import fa.trainning.utils.Constants;
 import fa.trainning.utils.Validator;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -89,4 +92,70 @@ public class CustomerService {
         return null;
     }
 
+    // 3
+    public List<String> findAll() {
+        List<String> customers = new ArrayList<>();
+        Path customerFilePath = Paths.get(Constants.CUSTOMER_FILE_PATH);
+        BufferedReader bufferedReader = null;
+        try {
+            bufferedReader = new BufferedReader(Files.newBufferedReader(customerFilePath));
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                customers.add(line);
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+
+            }
+        }
+        return customers;
+    }
+
+    // 4
+    public void display(List<String> customers) {
+        for (String customer : customers) {
+            System.out.println(customer);
+        }
+    }
+
+    // 5
+    public List<String> search(String phone) {
+        List<String> orders = new ArrayList<>();
+        Path customerFilePath = Paths.get(Constants.CUSTOMER_FILE_PATH);
+        BufferedReader bufferedReader = null;
+        try {
+            bufferedReader = new BufferedReader(Files.newBufferedReader(customerFilePath));
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] data = line.split("-");
+                if (data.length > 2 && data[2].equals(phone)) {
+                    data[3] = data[3].replaceAll("\\[", "");
+                    data[3] = data[3].replaceAll("\\]", "");
+                    String []dateOrders = data[3].split(",");
+                    for (String order : dateOrders) {
+                        orders.add(order.trim());
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+
+            }
+        }
+        return orders;
+    }
 }
