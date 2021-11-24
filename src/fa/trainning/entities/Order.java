@@ -2,13 +2,8 @@ package fa.trainning.entities;
 
 import fa.trainning.utils.Constants;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 import java.util.Date;
-import java.util.Scanner;
 
 public class Order {
     private String number;
@@ -41,10 +36,5 @@ public class Order {
     @Override
     public String toString() {
         return number + "-" + new SimpleDateFormat(Constants.DATE_FORMAT).format(date);
-    }
-
-    public void createOrder() {
-        Scanner scanner = new Scanner(System.in);
-
     }
 }

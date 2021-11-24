@@ -5,13 +5,22 @@ import fa.trainning.entities.Order;
 import fa.trainning.utils.Constants;
 import fa.trainning.utils.Validator;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class CustomerService {
-    //1
+    // 1
     public List<String> createCustomer() {
         Scanner scanner = new Scanner(System.in);
         List<String> customers = new ArrayList<>();
@@ -34,7 +43,7 @@ public class CustomerService {
             address = scanner.nextLine();
             System.out.println("Enter order list");
             while (true) {
-                Order order = new OrderService().createOrder();
+                Order order = new OrderService().createOrder(scanner);
                 orders.add(order);
                 System.out.println("Continue enter order, Y/N?");
                 if (Constants.NO.equalsIgnoreCase(scanner.nextLine())) {
@@ -47,17 +56,37 @@ public class CustomerService {
                 break;
             }
         }
+        scanner.close();
         return customers;
     }
 
-    //2
+    // 2
     public String save(List<String> customers) {
-        File customerFile = new File(Constants.CUSTOMER_FILE_PATH);
-        if (!customerFile.exists()) {
-            customerFile.mkdir();
+        Path dataFolderPath = Paths.get(Constants.DATA_FOLDER_PATH);
+        Path customerFilePath = Paths.get(Constants.CUSTOMER_FILE_PATH);
+        OutputStream outputStream = null;
+        try {
+            Files.createDirectories(dataFolderPath);
+            if (!Files.exists(customerFilePath)) {
+                Files.createFile(customerFilePath);
+            }
+            outputStream = new BufferedOutputStream(Files.newOutputStream(customerFilePath, StandardOpenOption.APPEND));
+            for (String customer : customers) {
+                outputStream.write((customer + Constants.NEW_LINE).getBytes());
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                }
+
+            }
         }
-
-
         return null;
     }
+
 }

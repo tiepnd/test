@@ -10,8 +10,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class OrderService {
-    public Order createOrder() {
-        Scanner scanner = new Scanner(System.in);
+    public Order createOrder(Scanner scanner) {
         String number;
         Date date;
         System.out.println("Enter number order with length equal 10");
