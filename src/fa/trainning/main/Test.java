@@ -11,8 +11,8 @@ public class Test {
 
         CustomerService customerService = new CustomerService();
         // List<String> customers = customerService.createCustomer();
-        // customers.forEach(customer -> System.out.println(customer));
+        // customerService.save(customers);
         customerService.display(customerService.findAll());
-        customerService.display(customerService.search("01656250022"));
+        // customerService.display(customerService.search("01656250022"));
     }
 }
